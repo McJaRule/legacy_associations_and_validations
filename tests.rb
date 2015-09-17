@@ -25,4 +25,15 @@ class ApplicationTest < Minitest::Test
     assert true
   end
 
+#Associate lessons with readings (both directions).
+#When a lesson is destroyed, its readings should be automatically destroyed.
+  def test_lessons_associated_with_readings
+    l = Lesson.create(name: "First Lesson")
+    r = Reading.create(caption: "First Reading")
+    assert l.readings
+    l.add_reading(r)
+    assert_equal [r], Lesson.find(l.id).readings
+  end
+
+
 end
