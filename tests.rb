@@ -156,5 +156,13 @@ class ApplicationTest < Minitest::Test
     refute u2.save
   end
 
+  # Validate that Assignments have a course_id, name, and percent_of_grade.
+  def test_assignments_must_have_qualities
+    a = Assignment.create(course_id: 3, name: "Assignment 3", percent_of_grade: 20.00)
+    a1 = Assignment.new(course_id: 3, name: "Assignment 3")
+    refute a1.save
+    a2 = Assignment.new(course_id: 4)
+    refute a2.save
+  end
 
 end
