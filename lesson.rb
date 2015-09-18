@@ -1,6 +1,6 @@
 class Lesson < ActiveRecord::Base
   has_many :readings, dependent: :destroy
-  # has_many :assignments, through: :courses
+  belongs_to :assignment
   belongs_to :course
 
   delegate :code_and_name, to: :course, prefix: true

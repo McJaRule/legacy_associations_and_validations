@@ -85,22 +85,14 @@ class ApplicationTest < Minitest::Test
     assert_equal 1, Course.count
   end
 
-
   #Associate lessons with their in_class_assignments (both directions).
-  # def test_lessons_associated_with_in_class_assignments
-  #   c = Course.create(name: "Computer Science")
-  #   l = Lesson.create(name: "First Lesson")
-  #   a = Assignment.create(name: "First Assignment")
-  #
-  #   c.add_lesson(l)
-  #   c.add_assignment(a)
-  #
-  #   l.add_reading(r)
-  #   c.add_lesson(l)
-  #
-  #   assert_equal [r], Course.find(c.id).readings
-  #   assert_equal [a], Lesson.find(l.id).assignments
-  # end
+  def test_lessons_associated_with_in_class_assignments
+    l = Lesson.create(name: "First Lesson")
+    a = Assignment.create(course_id: 3, name: "Assignment", percent_of_grade: 20.00)
+    a.lessons << l
+
+    assert_equal [l], Assignment.find(a.id).lessons
+  end
 
   # Set up a Course to have many readings through the Course's lessons.
   def test_course_associated_with_readings_through_lessons
