@@ -72,7 +72,7 @@ class ApplicationTest < Minitest::Test
     t = Term.new()
     refute t.save
     t1 = Term.new(name: "Summer", starts_on: 2015-01-04)
-    refute t.save
+    refute t1.save
   end
 
 # Terms must have a school_id.
@@ -82,6 +82,17 @@ def test_terms_associated_with_schools
   s.add_term(t)
   assert_equal [t], School.find(s.id).terms
 end
+
+#Validate that the User has a first_name, a last_name, and an email.
+def test_users_must_have_qualities
+  u = User.new()
+  refute u.save
+  u2 = User.new(first_name: "Ilan", last_name: "Man")
+  refute u2.save
+end
+
+
+#Validate that the User's email is unique.
 
 #Associate courses with course_instructors (both directions).
   # def test_course_instructors_associated_with_courses
