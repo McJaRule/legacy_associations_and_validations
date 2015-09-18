@@ -53,7 +53,7 @@ class ApplicationTest < Minitest::Test
   # Associate courses with course_students (both directions). If the course has any students associated with it, the course should not be deletable.
   def test_associate_courses_students_03
     timmy = CourseStudent.create(id: 1)
-    horsies = Course.create(name: "Are horsies pretty?")
+    horsies = Course.create(name: "Are horsies pretty?", course_code: "ABC 123")
     horsies.course_students << timmy
     assert_equal 1, Course.count
     horsies.destroy
@@ -63,7 +63,7 @@ class ApplicationTest < Minitest::Test
   # Associate assignments with courses (both directions). When a course is destroyed, its assignments should be automatically destroyed.
   # A course has many assignments
   def test_associate_assignments_courses_autoboom_assignments_04
-    that_thing = Course.create(name: "Things 101")
+    that_thing = Course.create(name: "Things 101", course_code: "ABC 123")
     did_you_get = Assignment.create(name: "Did you get that thing I sent ya?")
     that_thing.assignments << did_you_get
     assert_equal 1, Course.count
@@ -112,14 +112,17 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that Courses have a course_code and a name.
-  # def test_lessons_haz_course_code_and_name_10
-  #   Lesson.create()
-  # end
+  def test_courses_haz_course_code_and_name_10
+    b = Course.new()
+    a = Course.create(course_code: "ABC 123", name: "Michael Jackson")
+    assert a.name && a.course_code
+    refute b.save
+  end
 
-  # # Validate that the course_code is unique within a given term_id.
-  # def test_course_code_unique_within_term_11
-  #
-  # end
+  # Validate that the course_code is unique within a given term_id.
+  def test_course_code_unique_within_term_11
+  
+  end
   #
   # # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
   # def test_course_code_start_letter_end_number_12
