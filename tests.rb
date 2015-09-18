@@ -121,7 +121,12 @@ class ApplicationTest < Minitest::Test
 
   # Validate that the course_code is unique within a given term_id.
   def test_course_code_unique_within_term_11
-  
+    Course.create(course_code: "ABC 123", term_id: 1, name: "Poops")
+    c = Course.new(course_code: "ABC 123", term_id: 2, name: "Don't poops")
+    assert c.save
+    Course.create(course_code: "DEF 780", term_id: 3, name: "Everybody poops")
+    d = Course.new(course_code: "DEF 780", term_id: 3, name: "Speak for yourself, buddy")
+    refute d.save
   end
   #
   # # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
