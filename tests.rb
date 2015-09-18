@@ -79,11 +79,16 @@ class ApplicationTest < Minitest::Test
     assert_equal 1, Assignment.count
   end
 
-  # # Set up a School to have many courses through the school's terms.
-  # def test_school_courses_thru_terms_06
-  #
-  # end
-  #
+  # Set up a School to have many courses through the school's terms.
+  def test_school_courses_thru_terms_06
+    s = School.create(name: "The Iron Yard")
+    c = Course.create(name: "Things 101")
+    t = Term.create(name: "Fall 2015")
+    t.courses << c
+    s.terms << t
+    assert s.courses.include?(c)
+  end
+
   # # Validate that Lessons have names.
   # def test_lessons_can_haz_names_07
   #
