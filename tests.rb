@@ -60,16 +60,25 @@ class ApplicationTest < Minitest::Test
     assert_equal 1, Course.count
   end
 
-  # # Associate assignments with courses (both directions). When a course is destroyed, its assignments should be automatically destroyed.
-  # def test_associate_assignments_courses_autoboom_assignments_04
-  #
-  # end
-  #
-  # # Associate lessons with their pre_class_assignments (both directions).
-  # def test_associate_lessons_preassignments_05
-  #
-  # end
-  #
+  # Associate assignments with courses (both directions). When a course is destroyed, its assignments should be automatically destroyed.
+  # A course has many assignments
+  def test_associate_assignments_courses_autoboom_assignments_04
+    that_thing = Course.create(name: "Things 101")
+    did_you_get = Assignment.create(name: "Did you get that thing I sent ya?")
+    that_thing.assignments << did_you_get
+    assert_equal 1, Course.count
+    that_thing.destroy
+    assert_equal 0, Assignment.count
+  end
+
+  # Associate lessons with their pre_class_assignments (both directions).
+  def test_associate_lessons_preassignments_05
+    l = Lesson.create(name: "Get schooled")
+    a = Assignment.create(name: "Learn something")
+    a.lessons << l
+    assert_equal 1, Assignment.count
+  end
+
   # # Set up a School to have many courses through the school's terms.
   # def test_school_courses_thru_terms_06
   #
