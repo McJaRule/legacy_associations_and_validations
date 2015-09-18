@@ -89,11 +89,13 @@ class ApplicationTest < Minitest::Test
     assert s.courses.include?(c)
   end
 
-  # # Validate that Lessons have names.
-  # def test_lessons_can_haz_names_07
-  #
-  # end
-  #
+  # Validate that Lessons have names.
+  def test_lessons_can_haz_names_07
+    Lesson.create(name: "Life Lesson")
+    l = Lesson.new()
+    refute l.save
+  end
+
   # # Validate that Readings must have an order_number, a lesson_id, and a url.
   # def test_readings_must_order_number_lesson_id_and_url_08
   #

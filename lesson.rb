@@ -1,6 +1,7 @@
 class Lesson < ActiveRecord::Base
 
   belongs_to :assignment
+  validates :name, presence: true
 
   delegate :code_and_name, to: :course, prefix: true
 
