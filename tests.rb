@@ -103,16 +103,19 @@ class ApplicationTest < Minitest::Test
     refute r.save
   end
 
-  # # Validate that the Readings url must start with http:// or https://. Use a regular expression.
-  # def test_readings_url_must_start_with_http_09
-  #
-  # end
-  #
-  # # Validate that Courses have a course_code and a name.
+  # Validate that the Readings url must start with http:// or https://. Use a regular expression.
+  def test_readings_url_must_start_with_http_09
+    r = Reading.create(url: "http://www.boomboomroom.com")
+    assert r.url.include?("http")
+    s = Reading.new(url: "zombo.com")
+    refute s.save
+  end
+
+  # Validate that Courses have a course_code and a name.
   # def test_lessons_haz_course_code_and_name_10
-  #
+  #   Lesson.create()
   # end
-  #
+
   # # Validate that the course_code is unique within a given term_id.
   # def test_course_code_unique_within_term_11
   #
