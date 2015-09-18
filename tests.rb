@@ -44,21 +44,21 @@ class ApplicationTest < Minitest::Test
   end
 
   #Associate courses with lessons (both directions).
-    def test_courses_associated_with_lessons
-      l = Lesson.create(name: "First Lesson")
-      c = Course.create(name: "Computer Science")
-      c.add_lesson(l)
-      assert_equal [l], Course.find(c.id).lessons
-    end
+  def test_courses_associated_with_lessons
+    l = Lesson.create(name: "First Lesson")
+    c = Course.create(name: "Computer Science")
+    c.add_lesson(l)
+    assert_equal [l], Course.find(c.id).lessons
+  end
 
-  #When a lesson is destroyed, its readings should be automatically destroyed.
-    # def test_reading_destroyed_when_lesson_destroyed
-    #   l = Lesson.create(name: "First Lesson")
-    #   r = Reading.create(caption: "First Reading")
-    #   l.add_reading(r)
-    #   assert_equal 1, l.readings.count
-    #   Lesson.destroy_all
-    #   assert_equal 0, l.readings.count
-    # end
+#When a course is destroyed, its lessons should be automatically destroyed.
+  def test_lessons_destroyed_when_course_destroyed
+    l = Lesson.create(name: "First Lesson")
+    c = Course.create(name: "Computer Science")
+    c.add_lesson(l)
+    assert_equal 1, c.lessons.count
+    Course.destroy_all
+    assert_equal 0, c.lessons.count
+  end
 
 end
