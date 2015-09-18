@@ -76,37 +76,50 @@ class ApplicationTest < Minitest::Test
   end
 
 # Terms must have a school_id.
-def test_terms_associated_with_schools
-  t = Term.create(name: "Summer", starts_on: 2015-01-04, ends_on: 2015-06-02)
-  s = School.create(name: "Iron Yard")
-  s.add_term(t)
-  assert_equal [t], School.find(s.id).terms
-end
+  def test_terms_associated_with_schools
+    t = Term.create(name: "Summer", starts_on: 2015-01-04, ends_on: 2015-06-02)
+    s = School.create(name: "Iron Yard")
+    s.add_term(t)
+    assert_equal [t], School.find(s.id).terms
+  end
 
 #Validate that the User has a first_name, a last_name, and an email.
-def test_users_must_have_qualities
-  u = User.new()
-  refute u.save
-  u2 = User.new(first_name: "Ilan", last_name: "Man")
-  refute u2.save
-end
+  def test_users_must_have_qualities
+    u = User.new()
+    refute u.save
+    u2 = User.new(first_name: "Ilan", last_name: "Man")
+    refute u2.save
+  end
 
 #Validate that the User's email is unique.
-def test_unique_user_email
-  assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com")
+  def test_unique_user_email
+    assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com")
+    u = User.new(first_name: "Aliza", last_name: "Barkel", email: "ilan@gmail.com")
+    refute u.save
+  end
 
-  u = User.new(first_name: "Aliza", last_name: "Barkel", email: "ilan@gmail.com")
-  refute u.save
-end
+# Set up a Course to have many readings through the Course's lessons.
+  def test_course_associated_with_readings_through_lessons
+    c = Course.create(name: "Computer Science")
+    l = Lesson.create(name: "First Lesson")
+    r = Reading.create(caption: "First Reading")
+    l.add_reading(r)
+    c.add_lesson(l)
+    assert_equal [r], Course.find(c.id).readings
+  end
 
 
-#Associate courses with course_instructors (both directions).
-  # def test_course_instructors_associated_with_courses
-  #   c = Course.create(name: "Computer Science")
-  #   i = CourseInstructor.create(instructor_id: 1)
-  #   i.add_course(c)
-  #   assert_equal [c], CourseInstructor.find(i.id).courses
-  # end
+
+
+# Associate courses with course_instructors (both directions).
+#   def test_course_instructors_associated_with_courses
+#     c = Course.create(name: "Computer Science")
+#     i = CourseInstructor.create(instructor_id: 1)
+#     i.add_course(c)
+#     assert_equal [c], CourseInstructor.find(i.id).courses
+#   end
+#
+
 
 #If the course has any students associated with it, the course should not be deletable.
 
