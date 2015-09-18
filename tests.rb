@@ -61,4 +61,23 @@ class ApplicationTest < Minitest::Test
     assert_equal 0, c.lessons.count
   end
 
+#Validate that Schools must have name.
+  def test_schools_must_have_names
+    s = School.new()
+    refute s.save
+  end
+
+
+
+#Associate courses with course_instructors (both directions).
+  # def test_course_instructors_associated_with_courses
+  #   c = Course.create(name: "Computer Science")
+  #   i = CourseInstructor.create(instructor_id: 1)
+  #   i.add_course(c)
+  #   assert_equal [c], CourseInstructor.find(i.id).courses
+  # end
+
+#If the course has any students associated with it, the course should not be deletable.
+
+
 end
