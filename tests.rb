@@ -25,7 +25,7 @@ class ApplicationTest < Minitest::Test
     assert true
   end
 
-#Associate lessons with readings (both directions).
+  #Associate lessons with readings (both directions).
   def test_lessons_associated_with_readings
     l = Lesson.create(name: "First Lesson")
     r = Reading.create(caption: "First Reading")
@@ -33,7 +33,7 @@ class ApplicationTest < Minitest::Test
     assert_equal [r], Lesson.find(l.id).readings
   end
 
-#When a lesson is destroyed, its readings should be automatically destroyed.
+  #When a lesson is destroyed, its readings should be automatically destroyed.
   def test_reading_destroyed_when_lesson_destroyed
     l = Lesson.create(name: "First Lesson")
     r = Reading.create(caption: "First Reading")
@@ -51,7 +51,7 @@ class ApplicationTest < Minitest::Test
     assert_equal [l], Course.find(c.id).lessons
   end
 
-#When a course is destroyed, its lessons should be automatically destroyed.
+  #When a course is destroyed, its lessons should be automatically destroyed.
   def test_lessons_destroyed_when_course_destroyed
     l = Lesson.create(name: "First Lesson")
     c = Course.create(name: "Computer Science")
@@ -65,8 +65,8 @@ class ApplicationTest < Minitest::Test
   def test_course_instructors_associated_with_courses
     c = Course.create(name: "Computer Science")
     i = CourseInstructor.create()
-    i.add_course(c)
-    assert_equal [c], CourseInstructor.find(i.instructor_id).courses
+    c.add_course_instructor(i)
+    assert_equal [i], Course.find(c.id).course_instructors
   end
 
   #If the course has any students associated with it, the course should not be deletable.
@@ -104,7 +104,7 @@ class ApplicationTest < Minitest::Test
     refute s.save
   end
 
-#Validate that Terms must have name, starts_on, ends_on.
+  #Validate that Terms must have name, starts_on, ends_on.
   def test_terms_must_have_qualities
     t = Term.new()
     refute t.save
@@ -112,7 +112,7 @@ class ApplicationTest < Minitest::Test
     refute t1.save
   end
 
-# Terms must have a school_id.
+  # Terms must have a school_id.
   def test_terms_associated_with_schools
     t = Term.create(name: "Summer", starts_on: 2015-01-04, ends_on: 2015-06-02)
     s = School.create(name: "Iron Yard")
@@ -120,7 +120,7 @@ class ApplicationTest < Minitest::Test
     assert_equal [t], School.find(s.id).terms
   end
 
-#Validate that the User has a first_name, a last_name, and an email.
+  #Validate that the User has a first_name, a last_name, and an email.
   def test_users_must_have_qualities
     u = User.new()
     refute u.save
@@ -128,7 +128,7 @@ class ApplicationTest < Minitest::Test
     refute u2.save
   end
 
-#Validate that the User's email is unique.
+  #Validate that the User's email is unique.
   def test_unique_user_email
     assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com")
     u = User.new(first_name: "Aliza", last_name: "Barkel", email: "ilan@gmail.com")
@@ -136,7 +136,6 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that the User's email has the appropriate form for an e-mail address. Use a regular expression.
-
   def test_user_email_has_email_format
     assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com")
     u = User.new(first_name: "Aliza", last_name: "Barkel", email: "ilan")
@@ -146,7 +145,6 @@ class ApplicationTest < Minitest::Test
   end
 
   # Validate that the User's photo_url must start with http:// or https://. Use a regular expression.
-
   def test_user_email_has_photo_url_format
     assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com", photo_url: "http://www.photourl.com")
     assert User.create(first_name: "Ruti", last_name: "Wajnberg", email: "ruti@gmail.com", photo_url: "https://www.photourl.com")
@@ -170,9 +168,8 @@ class ApplicationTest < Minitest::Test
     a = Assignment.create(course_id: 1, name: "Assignment 1", percent_of_grade: 20.00)
     a1 = Assignment.new(course_id: 2, name: "Assignment 1", percent_of_grade: 20.00)
     assert a1.save
-    a2 = Assignment.new(course_id: 3, name: "Assignment 3", percent_of_grade: 20.00)
+    a2 = Assignment.create(course_id: 3, name: "Assignment 3", percent_of_grade: 20.00)
     a3 = Assignment.new(course_id: 3, name: "Assignment 3", percent_of_grade: 20.00)
-    assert a2.save
     refute a3.save
   end
 

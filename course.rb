@@ -1,7 +1,7 @@
 class Course < ActiveRecord::Base
   has_many :lessons, dependent: :destroy
   has_many :readings, through: :lessons
-  #belongs_to :course_instructor#, class_name: "CourseInstructor", foreign_key: "user_id"
+  has_many :course_instructors, foreign_key: "instructor_id"
   # has_many :assignments
 
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
@@ -16,6 +16,10 @@ class Course < ActiveRecord::Base
 
   def add_lesson(lesson)
     lessons << lesson
+  end
+
+  def add_course_instructor(course_instructor)
+    course_instructors << course_instructor
   end
 
   def self.example_courses
