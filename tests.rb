@@ -91,8 +91,14 @@ def test_users_must_have_qualities
   refute u2.save
 end
 
-
 #Validate that the User's email is unique.
+def test_unique_user_email
+  assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com")
+
+  u = User.new(first_name: "Aliza", last_name: "Barkel", email: "ilan@gmail.com")
+  refute u.save
+end
+
 
 #Associate courses with course_instructors (both directions).
   # def test_course_instructors_associated_with_courses
