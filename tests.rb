@@ -128,9 +128,14 @@ class ApplicationTest < Minitest::Test
     d = Course.new(course_code: "DEF 780", term_id: 3, name: "Speak for yourself, buddy")
     refute d.save
   end
-  #
-  # # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
-  # def test_course_code_start_letter_end_number_12
-  #
-  # end
+
+  # Validate that the course_code starts with three letters and ends with three numbers. Use a regular expression.
+  def test_course_code_start_letter_end_number_12
+    Course.create(course_code: "ABC123", name: "Crashing Cars 101", term_id: 1)
+    d = Course.new(course_code: "ABC123", name: "Crashing Cars 101", term_id: 2)
+    assert d.save
+    Course.create(course_code: "DEF 234", name: "Crashing Cars 101", term_id: 3)
+    e = Course.new(course_code: "DEF 234", name: "Crashing Cars 101", term_id: 4)
+    assert e.save
+  end
 end
