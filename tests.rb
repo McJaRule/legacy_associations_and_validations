@@ -61,6 +61,43 @@ class ApplicationTest < Minitest::Test
     assert_equal 0, c.lessons.count
   end
 
+#Associate courses with course_instructors (both directions).
+    # def test_course_instructors_associated_with_courses
+    #   c = Course.create(name: "Computer Science")
+    #   i = CourseInstructor.create()
+    #   i.add_course(c)
+    #   assert_equal [c], CourseInstructor.find(i.instructor_id).courses
+    # end
+
+  #If the course has any students associated with it, the course should not be deletable.
+  # def test_if_course_has_students_course_cannot_be_deleted
+  # end
+  #Associate lessons with their in_class_assignments (both directions).
+  # def test_lessons_associated_with_in_class_assignments
+  #   c = Course.create(name: "Computer Science")
+  #   l = Lesson.create(name: "First Lesson")
+  #   a = Assignment.create(name: "First Assignment")
+  #
+  #   c.add_lesson(l)
+  #   c.add_assignment(a)
+  #
+  #   l.add_reading(r)
+  #   c.add_lesson(l)
+  #
+  #   assert_equal [r], Course.find(c.id).readings
+  #   assert_equal [a], Lesson.find(l.id).assignments
+  # end
+
+# Set up a Course to have many readings through the Course's lessons.
+  def test_course_associated_with_readings_through_lessons
+    c = Course.create(name: "Computer Science")
+    l = Lesson.create(name: "First Lesson")
+    r = Reading.create(caption: "First Reading")
+    l.add_reading(r)
+    c.add_lesson(l)
+    assert_equal [r], Course.find(c.id).readings
+  end
+
 #Validate that Schools must have name.
   def test_schools_must_have_names
     s = School.new()
@@ -98,30 +135,16 @@ class ApplicationTest < Minitest::Test
     refute u.save
   end
 
-# Set up a Course to have many readings through the Course's lessons.
-  def test_course_associated_with_readings_through_lessons
-    c = Course.create(name: "Computer Science")
-    l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
-    l.add_reading(r)
-    c.add_lesson(l)
-    assert_equal [r], Course.find(c.id).readings
+  # Validate that the User's email has the appropriate form for an e-mail address. Use a regular expression.
+
+  def test_user_email_has_email_format
+    assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com")
+    u = User.new(first_name: "Aliza", last_name: "Barkel", email: "ilan")
+    refute u.save
+    u2 = User.new(first_name: "Aliza", last_name: "Barkel", email: "@hi.com")
+    refute u2.save
   end
 
-
-
-
-# Associate courses with course_instructors (both directions).
-#   def test_course_instructors_associated_with_courses
-#     c = Course.create(name: "Computer Science")
-#     i = CourseInstructor.create(instructor_id: 1)
-#     i.add_course(c)
-#     assert_equal [c], CourseInstructor.find(i.id).courses
-#   end
-#
-
-
-#If the course has any students associated with it, the course should not be deletable.
 
 
 end

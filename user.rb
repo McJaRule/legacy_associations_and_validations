@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true
+  validates :email, format: { with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, on: :create }
+  #has_many :course_instructors, clabss_name: "CourseInstructor", foreign_key: "instructor_id"
+  #has_many :course_students, class_name: "CourseStudent", foreign_key: "student_id"
 
 
   scope :want_to_be_instructors, -> { where(wants_to_be_instructor: true) }
