@@ -67,13 +67,22 @@ class ApplicationTest < Minitest::Test
     refute s.save
   end
 
-#Validate that Terms must have name, starts_on, ends_on, and school_id.
+#Validate that Terms must have name, starts_on, ends_on.
   def test_terms_must_have_qualities
     t = Term.new()
     refute t.save
     t1 = Term.new(name: "Summer", starts_on: 2015-01-04)
     refute t.save
   end
+
+# Terms must have a school_id.
+def test_terms_associated_with_schools
+  t = Term.create(name: "Summer", starts_on: 2015-01-04, ends_on: 2015-06-02)
+  s = School.create(name: "Iron Yard")
+  s.add_term(t)
+  assert_equal [t], School.find(s.id).terms
+end
+
 #Associate courses with course_instructors (both directions).
   # def test_course_instructors_associated_with_courses
   #   c = Course.create(name: "Computer Science")
