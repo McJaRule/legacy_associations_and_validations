@@ -145,6 +145,16 @@ class ApplicationTest < Minitest::Test
     refute u2.save
   end
 
+  # Validate that the User's photo_url must start with http:// or https://. Use a regular expression.
+
+  def test_user_email_has_photo_url_format
+    assert User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com", photo_url: "http://www.photourl.com")
+    assert User.create(first_name: "Ruti", last_name: "Wajnberg", email: "ruti@gmail.com", photo_url: "https://www.photourl.com")
+    u = User.new(first_name: "Aliza", last_name: "Barkel", email: "aliza@gmail.com", photo_url: "www.photourl.com")
+    refute u.save
+    u2 = User.new(first_name: "Steven", last_name: "Barkel", email: "steven@gmail.com", photo_url: "photourl.com")
+    refute u2.save
+  end
 
 
 end

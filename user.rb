@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :email, format: { with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, on: :create }
+  validates :photo_url, format: {with: /\A(http|https):\/\/\S+/i}
   #has_many :course_instructors, clabss_name: "CourseInstructor", foreign_key: "instructor_id"
   #has_many :course_students, class_name: "CourseStudent", foreign_key: "student_id"
 
