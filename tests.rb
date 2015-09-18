@@ -61,13 +61,13 @@ class ApplicationTest < Minitest::Test
     assert_equal 0, c.lessons.count
   end
 
-#Associate courses with course_instructors (both directions).
-    # def test_course_instructors_associated_with_courses
-    #   c = Course.create(name: "Computer Science")
-    #   i = CourseInstructor.create()
-    #   i.add_course(c)
-    #   assert_equal [c], CourseInstructor.find(i.instructor_id).courses
-    # end
+  #Associate courses with course_instructors (both directions).
+  def test_course_instructors_associated_with_courses
+    c = Course.create(name: "Computer Science")
+    i = CourseInstructor.create()
+    i.add_course(c)
+    assert_equal [c], CourseInstructor.find(i.instructor_id).courses
+  end
 
   #If the course has any students associated with it, the course should not be deletable.
   # def test_if_course_has_students_course_cannot_be_deleted
@@ -88,7 +88,7 @@ class ApplicationTest < Minitest::Test
   #   assert_equal [a], Lesson.find(l.id).assignments
   # end
 
-# Set up a Course to have many readings through the Course's lessons.
+  # Set up a Course to have many readings through the Course's lessons.
   def test_course_associated_with_readings_through_lessons
     c = Course.create(name: "Computer Science")
     l = Lesson.create(name: "First Lesson")
@@ -98,7 +98,7 @@ class ApplicationTest < Minitest::Test
     assert_equal [r], Course.find(c.id).readings
   end
 
-#Validate that Schools must have name.
+  #Validate that Schools must have name.
   def test_schools_must_have_names
     s = School.new()
     refute s.save
@@ -163,6 +163,17 @@ class ApplicationTest < Minitest::Test
     refute a1.save
     a2 = Assignment.new(course_id: 4)
     refute a2.save
+  end
+
+  # Validate that the Assignment name is unique within a given course_id.
+  def test_unique_assignment_name_within_course_id
+    a = Assignment.create(course_id: 1, name: "Assignment 1", percent_of_grade: 20.00)
+    a1 = Assignment.new(course_id: 2, name: "Assignment 1", percent_of_grade: 20.00)
+    assert a1.save
+    a2 = Assignment.new(course_id: 3, name: "Assignment 3", percent_of_grade: 20.00)
+    a3 = Assignment.new(course_id: 3, name: "Assignment 3", percent_of_grade: 20.00)
+    assert a2.save
+    refute a3.save
   end
 
 end
