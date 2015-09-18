@@ -12,14 +12,20 @@ ActiveRecord::Base.establish_connection(
   database: 'test.sqlite3'
 )
 
+ActiveRecord::Migration.verbose = false
+
 # Gotta run migrations before we can run tests.  Down will fail the first time,
 # so we wrap it in a begin/rescue.
-begin ApplicationMigration.migrate(:down); rescue; end
-ApplicationMigration.migrate(:up)
+
 
 
 # Finally!  Let's test the thing.
 class ApplicationTest < Minitest::Test
+
+  def setup
+    begin ApplicationMigration.migrate(:down); rescue; end
+    ApplicationMigration.migrate(:up)
+  end
 
   def test_truth
     assert true
@@ -39,30 +45,21 @@ class ApplicationTest < Minitest::Test
     t = Term.create(name: "Fall 2015")
     c = Course.create(name: "Ruby on Rails")
     t.courses << c
-    assert t.reload.courses.include?(c)
-    refute t.destroy
-  end
-
-  def test_term_undeletable_if_courses
-    Term.destroy_all
-    t = Term.create(name: "Fall 2015")
-    assert_equal 1, Term.count
-    t.destroy
-    assert_equal 0, Term.count
-
-    t = Term.create(name: "Fall 2015")
-    c = Course.create(name: "Ruby on Rails")
-    t.courses << c
     assert_equal 1, Term.count
     t.destroy
     assert_equal 1, Term.count
   end
 
-  # # Associate courses with course_students (both directions). If the course has any students associated with it, the course should not be deletable.
-  # def test_associate_courses_students_03
-  #
-  # end
-  #
+  # Associate courses with course_students (both directions). If the course has any students associated with it, the course should not be deletable.
+  def test_associate_courses_students_03
+    timmy = CourseStudent.create(id: 1)
+    horsies = Course.create(name: "Are horsies pretty?")
+    horsies.course_students << timmy
+    assert_equal 1, Course.count
+    horsies.destroy
+    assert_equal 1, Course.count
+  end
+
   # # Associate assignments with courses (both directions). When a course is destroyed, its assignments should be automatically destroyed.
   # def test_associate_assignments_courses_autoboom_assignments_04
   #
