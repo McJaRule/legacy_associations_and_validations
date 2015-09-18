@@ -28,9 +28,9 @@ require './user.rb'
 # DONE: Validate that the User's photo_url must start with http:// or https://. Use a regular expression.
 # DONE: Validate that Assignments have a course_id, name, and percent_of_grade.
 # DONE: Validate that the Assignment name is unique within a given course_id.
+# DONE: Associate courses with course_instructors (both directions).
 
-# 1. Associate courses with course_instructors (both directions).
-# - course instructors belong to instructors, but thats really a user. So when establish the belongs to, add a stipulation that that's really user.
+
 # 2. If the course has any students associated with it, the course should not be deletable.
 # 3. Associate lessons with their in_class_assignments (both directions).
 # - figure out how to associate with through when non-linear

@@ -70,8 +70,22 @@ class ApplicationTest < Minitest::Test
   end
 
   #If the course has any students associated with it, the course should not be deletable.
-  # def test_if_course_has_students_course_cannot_be_deleted
-  # end
+  def test_if_course_has_students_course_cannot_be_deleted
+    Course.destroy_all
+    c = Course.create(name: "Computer Science")
+    assert_equal 1, Course.count
+    Course.destroy_all
+    assert_equal 0, Course.count
+
+    c2 = Course.create(name: "Ruby on Rails")
+    s = CourseStudent.create()
+    c2.add_course_student(s)
+    assert_equal 1, Course.count
+    Course.destroy_all
+    assert_equal 1, Course.count
+  end
+
+
   #Associate lessons with their in_class_assignments (both directions).
   # def test_lessons_associated_with_in_class_assignments
   #   c = Course.create(name: "Computer Science")
