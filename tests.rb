@@ -21,15 +21,12 @@ ApplicationMigration.migrate(:up)
 # Finally!  Let's test the thing.
 class ApplicationTest < Minitest::Test
 
-  def test_truth
-    assert true
-  end
-
   #Associate lessons with readings (both directions).
   def test_lessons_associated_with_readings
     l = Lesson.create(name: "First Lesson")
     r = Reading.create(caption: "First Reading")
-    l.add_reading(r)
+    l.readings << r
+
     assert_equal [r], Lesson.find(l.id).readings
   end
 
@@ -37,7 +34,7 @@ class ApplicationTest < Minitest::Test
   def test_reading_destroyed_when_lesson_destroyed
     l = Lesson.create(name: "First Lesson")
     r = Reading.create(caption: "First Reading")
-    l.add_reading(r)
+    l.readings << r
     assert_equal 1, l.readings.count
     Lesson.destroy_all
     assert_equal 0, l.readings.count
@@ -47,7 +44,7 @@ class ApplicationTest < Minitest::Test
   def test_courses_associated_with_lessons
     l = Lesson.create(name: "First Lesson")
     c = Course.create(name: "Computer Science")
-    c.add_lesson(l)
+    c.lessons << l
     assert_equal [l], Course.find(c.id).lessons
   end
 
@@ -55,7 +52,7 @@ class ApplicationTest < Minitest::Test
   def test_lessons_destroyed_when_course_destroyed
     l = Lesson.create(name: "First Lesson")
     c = Course.create(name: "Computer Science")
-    c.add_lesson(l)
+    c.lessons << l
     assert_equal 1, c.lessons.count
     Course.destroy_all
     assert_equal 0, c.lessons.count
@@ -65,7 +62,7 @@ class ApplicationTest < Minitest::Test
   def test_course_instructors_associated_with_courses
     c = Course.create(name: "Computer Science")
     i = CourseInstructor.create()
-    c.add_course_instructor(i)
+    c.course_instructors << i
     assert_equal [i], Course.find(c.id).course_instructors
   end
 
@@ -79,7 +76,7 @@ class ApplicationTest < Minitest::Test
 
     c2 = Course.create(name: "Ruby on Rails")
     s = CourseStudent.create()
-    c2.add_course_student(s)
+    c2.course_students << s
     assert_equal 1, Course.count
     Course.destroy_all
     assert_equal 1, Course.count
@@ -88,7 +85,7 @@ class ApplicationTest < Minitest::Test
   #Associate lessons with their in_class_assignments (both directions).
   def test_lessons_associated_with_in_class_assignments
     l = Lesson.create(name: "First Lesson")
-    a = Assignment.create(course_id: 3, name: "Assignment", percent_of_grade: 20.00)
+    a = Assignment.create(course_id: 3, name: "Unique Assignment", percent_of_grade: 20.00)
     a.lessons << l
 
     assert_equal [l], Assignment.find(a.id).lessons
@@ -99,8 +96,8 @@ class ApplicationTest < Minitest::Test
     c = Course.create(name: "Computer Science")
     l = Lesson.create(name: "First Lesson")
     r = Reading.create(caption: "First Reading")
-    l.add_reading(r)
-    c.add_lesson(l)
+    l.readings << r
+    c.lessons << l
     assert_equal [r], Course.find(c.id).readings
   end
 
