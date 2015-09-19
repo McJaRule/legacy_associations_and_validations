@@ -1,4 +1,5 @@
 class Reading < ActiveRecord::Base
+  belongs_to :lesson
 
   validates :lesson_id, presence: true
   validates :order_number, presence: true
