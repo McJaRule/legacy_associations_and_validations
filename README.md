@@ -24,4 +24,4 @@ This program creates relationships and requirements on schools.
 
 ## ERD
 
-![alt tag](https://raw.github.com/McJaRule/legacy_associations_validations/Legacy Associations and Validations.png)
+![alt tag](https://github.com/McJaRule/legacy_associations_validations/blob/master/Legacy%20Associations%20and%20Validations.png)
