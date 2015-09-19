@@ -1,4 +1,10 @@
 class Course < ActiveRecord::Base
+  has_many :lessons, dependent: :destroy
+  has_many :readings, through: :lessons
+  has_many :course_instructors, foreign_key: "instructor_id"
+  has_many :course_students, foreign_key: "student_id", dependent: :restrict_with_error
+
+  # has_many :assignments
 
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
 
@@ -9,6 +15,18 @@ class Course < ActiveRecord::Base
 
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
+
+  def add_lesson(lesson)
+    lessons << lesson
+  end
+
+  def add_course_instructor(course_instructor)
+    course_instructors << course_instructor
+  end
+
+  def add_course_student(course_student)
+    course_students << course_student
+  end
 
   def self.example_courses
     self.where(public: true).order("id DESC").first(5)

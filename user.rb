@@ -1,4 +1,11 @@
 class User < ActiveRecord::Base
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :email, presence: true, uniqueness: true
+  validates :email, format: { with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i, on: :create }
+  validates :photo_url, format: {with: /\A(http|https):\/\/\S+/i}
+  has_many :course_instructors, foreign_key: "instructor_id"
+  has_many :course_students, foreign_key: "student_id"
 
   scope :want_to_be_instructors, -> { where(wants_to_be_instructor: true) }
   scope :instructors_for_school_id, ->(school_id) { where(school_id: school_id, instructor: true) }

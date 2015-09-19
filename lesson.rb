@@ -1,9 +1,17 @@
 class Lesson < ActiveRecord::Base
+  has_many :readings, dependent: :destroy
+  belongs_to :assignment
+  belongs_to :course
+
   delegate :code_and_name, to: :course, prefix: true
 
   scope :roots, -> { where("parent_lesson_id IS NULL") }
   scope :without_day_assignments, -> { where("day_assignment_id IS NULL") }
   scope :without_night_assignments, -> { where("night_assignment_id IS NULL") }
+
+  def add_reading(reading)
+    readings << reading
+  end
 
   def self.linked_to_assignment(assignment)
     found_lesson = where(pre_class_assignment_id: assignment.id).first
