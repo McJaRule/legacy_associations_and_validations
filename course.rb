@@ -5,6 +5,7 @@ class Course < ActiveRecord::Base
   has_many :course_students, foreign_key: "student_id", dependent: :restrict_with_error
   has_many :course_students, dependent: :restrict_with_error
   has_many :assignments, dependent: :destroy
+  has_many :students, class_name: "User", through: :course_students
 
   belongs_to :term
 

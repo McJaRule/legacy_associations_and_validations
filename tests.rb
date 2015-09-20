@@ -305,4 +305,14 @@ class ApplicationTest < Minitest::Test
     assert_equal [ag], CourseStudent.find(cs.id).assignment_grades
   end
 
+  #Set up a Course to have many students through the course's course_students.
+  def test_course_associated_with_students_through_course_students
+    c = Course.create(course_code: "tiy 234", name: "Goat Cheese Making", term_id: 2)
+    cs = CourseStudent.create()
+    u = User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com", photo_url: "http://www.photo.com")
+    c.course_students << cs
+    u.course_students << cs
+    assert_equal [u], Course.find(c.id).students
+  end
+
 end
