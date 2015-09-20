@@ -176,4 +176,12 @@ class ApplicationTest < Minitest::Test
     refute a3.save
   end
 
+  def test_course_students_associated_with_users
+    cs = CourseStudent.create()
+    u = User.new(first_name: "Ruti", last_name: "Wajnberg", email: "ruti@gmail.com", photo_url: "https://www.photo.com")
+    u.save
+    u.course_students << cs
+    assert_equal [cs], User.find(u.id).course_students
+  end
+
 end
