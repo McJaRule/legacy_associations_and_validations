@@ -176,4 +176,11 @@ class ApplicationTest < Minitest::Test
     refute a3.save
   end
 
+  def test_course_students_associated_with_students
+    cs = CourseStudent.create()
+    i = CourseInstructor.create()
+    c.course_instructors << i
+    assert_equal [i], Course.find(c.id).course_instructors
+  end
+
 end
