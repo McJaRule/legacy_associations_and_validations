@@ -21,3 +21,8 @@ This program creates relationships and requirements on schools.
 * Terms must have name, starts_on, ends_on, and school_id.
 * User must have a first_name, a last_name, and an email. User's email must be unique and have the appropriate form for an e-mail address. User's photo_url must start with http:// or https://.
 * Assignments must have a course_id, name, and percent_of_grade, and Assignment name must be unique within a given course_id.
+
+## ERD
+
+![alt tag](https://github.com/McJaRule/legacy_associations_validations/blob/master/Legacy%20Associations%20and%20Validations.png)
+>>>>>>> 75b23dc5fb367ad3609bf829e6c3abf54915926e

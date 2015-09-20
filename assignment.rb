@@ -4,6 +4,9 @@ class Assignment < ActiveRecord::Base
   validates :name, presence: true, uniqueness: {scope: :course_id}
   validates :percent_of_grade, presence: true
 
+  belongs_to :course
+  has_many :lessons, foreign_key: "pre_class_assignment_id"
+
   scope :active_for_students, -> { where("active_at <= ? AND due_at >= ? AND students_can_submit = ?", Time.now, Time.now, true) }
 
   delegate :code_and_name, :color, to: :course, prefix: true
