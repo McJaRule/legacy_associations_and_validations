@@ -297,4 +297,36 @@ class ApplicationTest < Minitest::Test
     assert_equal [cs], User.find(u.id).course_students
   end
 
+  #Associate CourseStudents with assignment_grades (both directions)
+  def test_course_students_associated_with_assignment_grades
+    cs = CourseStudent.create()
+    ag = AssignmentGrade.create()
+    cs.assignment_grades << ag
+    assert_equal [ag], CourseStudent.find(cs.id).assignment_grades
+  end
+
+  #Set up a Course to have many students through the course's course_students.
+  def test_course_associated_with_students_through_course_students
+    c = Course.create(course_code: "tiy 234", name: "Goat Cheese Making", term_id: 2)
+    cs = CourseStudent.create()
+    u = User.create(first_name: "Ilan", last_name: "Man", email: "ilan@gmail.com", photo_url: "http://www.photo.com")
+    c.course_students << cs
+    u.course_students << cs
+    assert_equal [u], Course.find(c.id).students
+  end
+
+  #Associate a Course with its ONE primary_instructor.
+  #This primary instructor is the one who is referenced by a course_instructor which has its primary flag set to true.
+  def test_course_associated_with_primary_instructor
+    c = Course.create(course_code: "tuv 789", name: "Getting Along", term_id: 3)
+    ci = CourseInstructor.create(primary: true)
+    ci2 = CourseInstructor.create()
+    c.course_instructors << ci
+    c.course_instructors << ci2
+    assert_equal ci, Course.find(c.id).primary_instructor
+
+
+  end
+
+
 end
