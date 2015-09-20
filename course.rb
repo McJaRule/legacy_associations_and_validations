@@ -3,12 +3,11 @@ class Course < ActiveRecord::Base
   has_many :readings, through: :lessons
   has_many :course_instructors, foreign_key: "instructor_id"
   has_many :course_students, foreign_key: "student_id", dependent: :restrict_with_error
-
-  # has_many :assignments
-
-  belongs_to :term
   has_many :course_students, dependent: :restrict_with_error
   has_many :assignments, dependent: :destroy
+
+  belongs_to :term
+
   validates :course_code, presence: true, uniqueness: {scope: :term_id}
   validates :name, presence: true
   validates :course_code, format: {with: /\A\w{3}\s?\d{3}\z/}

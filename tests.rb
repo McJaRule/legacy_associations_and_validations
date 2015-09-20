@@ -185,7 +185,6 @@ class ApplicationTest < Minitest::Test
     refute a3.save
   end
 
-<<<<<<< HEAD
   def test_course_students_associated_with_students
     cs = CourseStudent.create()
     i = CourseInstructor.create()
@@ -193,7 +192,6 @@ class ApplicationTest < Minitest::Test
     assert_equal [i], Course.find(c.id).course_instructors
   end
 
-=======
   # Associate schools with terms (both directions).
   def test_associate_schools_terms_01
     s = School.create(name: "The Iron Yard")
@@ -301,5 +299,4 @@ class ApplicationTest < Minitest::Test
     e = Course.new(course_code: "DEF 234", name: "Crashing Cars 101", term_id: 4)
     assert e.save
   end
->>>>>>> 75b23dc5fb367ad3609bf829e6c3abf54915926e
 end
