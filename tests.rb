@@ -17,8 +17,6 @@ ActiveRecord::Migration.verbose = false
 # Gotta run migrations before we can run tests.  Down will fail the first time,
 # so we wrap it in a begin/rescue.
 
-
-
 # Finally!  Let's test the thing.
 class ApplicationTest < Minitest::Test
 
@@ -27,9 +25,6 @@ class ApplicationTest < Minitest::Test
     ApplicationMigration.migrate(:up)
   end
 
-  def test_truth
-    assert true
-  end
   #Associate lessons with readings (both directions).
   def test_lessons_associated_with_readings
     l = Lesson.create(name: "First Lesson")
@@ -52,7 +47,7 @@ class ApplicationTest < Minitest::Test
   #Associate courses with lessons (both directions).
   def test_courses_associated_with_lessons
     l = Lesson.create(name: "First Lesson")
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Comp Sci", course_code: "ghi987")
     c.lessons << l
     assert_equal [l], Course.find(c.id).lessons
   end
@@ -185,13 +180,6 @@ class ApplicationTest < Minitest::Test
     refute a3.save
   end
 
-  def test_course_students_associated_with_students
-    cs = CourseStudent.create()
-    i = CourseInstructor.create()
-    c.course_instructors << i
-    assert_equal [i], Course.find(c.id).course_instructors
-  end
-
   # Associate schools with terms (both directions).
   def test_associate_schools_terms_01
     s = School.create(name: "The Iron Yard")
@@ -299,4 +287,14 @@ class ApplicationTest < Minitest::Test
     e = Course.new(course_code: "DEF 234", name: "Crashing Cars 101", term_id: 4)
     assert e.save
   end
+
+  #Associate CourseStudents with students, who happen to be users
+  def test_course_students_associated_with_users
+    cs = CourseStudent.create()
+    u = User.new(first_name: "Ruti", last_name: "Wajnberg", email: "ruti@gmail.com", photo_url: "https://www.photo.com")
+    u.save
+    u.course_students << cs
+    assert_equal [cs], User.find(u.id).course_students
+  end
+
 end
