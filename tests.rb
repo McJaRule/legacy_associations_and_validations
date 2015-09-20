@@ -184,4 +184,12 @@ class ApplicationTest < Minitest::Test
     assert_equal [cs], User.find(u.id).course_students
   end
 
+  #Associate CourseStudents with assignment_grades (both directions)
+  def test_course_students_associated_with_assignment_grades
+    cs = CourseStudent.create()
+    ag = AssignmentGrade.create()
+    cs.assignment_grades << ag
+    assert_equal [ag], CourseStudent.find(cs.id).assignment_grades
+  end
+
 end
