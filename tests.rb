@@ -315,4 +315,18 @@ class ApplicationTest < Minitest::Test
     assert_equal [u], Course.find(c.id).students
   end
 
+  #Associate a Course with its ONE primary_instructor.
+  #This primary instructor is the one who is referenced by a course_instructor which has its primary flag set to true.
+  def test_course_associated_with_primary_instructor
+    c = Course.create(course_code: "tuv 789", name: "Getting Along", term_id: 3)
+    ci = CourseInstructor.create(primary: true)
+    ci2 = CourseInstructor.create()
+    c.course_instructors << ci
+    c.course_instructors << ci2
+    assert_equal ci, Course.find(c.id).primary_instructor
+
+
+  end
+
+
 end

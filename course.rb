@@ -7,6 +7,8 @@ class Course < ActiveRecord::Base
   has_many :assignments, dependent: :destroy
   has_many :students, class_name: "User", through: :course_students
 
+  has_one :primary_instructor, -> { where primary: true }, class_name: "CourseInstructor", foreign_key: "instructor_id"
+
   belongs_to :term
 
   validates :course_code, presence: true, uniqueness: {scope: :term_id}
