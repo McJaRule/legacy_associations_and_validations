@@ -55,7 +55,7 @@ class ApplicationTest < Minitest::Test
   #When a course is destroyed, its lessons should be automatically destroyed.
   def test_lessons_destroyed_when_course_destroyed
     l = Lesson.create(name: "First Lesson")
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Front End", course_code: "tiy277")
     c.lessons << l
     assert_equal 1, c.lessons.count
     Course.destroy_all
@@ -64,7 +64,7 @@ class ApplicationTest < Minitest::Test
 
   #Associate courses with course_instructors (both directions).
   def test_course_instructors_associated_with_courses
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Tech News", course_code: "xyz546")
     i = CourseInstructor.create()
     c.course_instructors << i
     assert_equal [i], Course.find(c.id).course_instructors
@@ -73,12 +73,12 @@ class ApplicationTest < Minitest::Test
   #If the course has any students associated with it, the course should not be deletable.
   def test_if_course_has_students_course_cannot_be_deleted
     Course.destroy_all
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Computer Sci", course_code: "rst654")
     assert_equal 1, Course.count
     Course.destroy_all
     assert_equal 0, Course.count
 
-    c2 = Course.create(name: "Ruby on Rails")
+    c2 = Course.create(name: "Ruby on Rails", course_code: "abc098")
     s = CourseStudent.create()
     c2.course_students << s
     assert_equal 1, Course.count
@@ -97,7 +97,7 @@ class ApplicationTest < Minitest::Test
 
   # Set up a Course to have many readings through the Course's lessons.
   def test_course_associated_with_readings_through_lessons
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "CompSci", course_code: "tiy123")
     l = Lesson.create(name: "First Lesson")
     r = Reading.create(caption: "First Reading")
     l.readings << r
@@ -192,7 +192,7 @@ class ApplicationTest < Minitest::Test
   # Associate terms with courses (both directions). If a term has any courses associated with it, the term should not be deletable.
   def test_associate_terms_courses_02
     t = Term.create(name: "Fall 2015")
-    c = Course.create(name: "Ruby on Rails")
+    c = Course.create(name: "Ruby on Rails", course_code: "rut840")
     t.courses << c
     assert_equal 1, Term.count
     t.destroy
