@@ -17,8 +17,6 @@ ActiveRecord::Migration.verbose = false
 # Gotta run migrations before we can run tests.  Down will fail the first time,
 # so we wrap it in a begin/rescue.
 
-
-
 # Finally!  Let's test the thing.
 class ApplicationTest < Minitest::Test
 
@@ -27,13 +25,10 @@ class ApplicationTest < Minitest::Test
     ApplicationMigration.migrate(:up)
   end
 
-  def test_truth
-    assert true
-  end
   #Associate lessons with readings (both directions).
   def test_lessons_associated_with_readings
     l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
+    r = Reading.create(lesson_id: 1, order_number: 4, url: "http://www.urltest.com")
     l.readings << r
 
     assert_equal [r], Lesson.find(l.id).readings
@@ -42,7 +37,7 @@ class ApplicationTest < Minitest::Test
   #When a lesson is destroyed, its readings should be automatically destroyed.
   def test_reading_destroyed_when_lesson_destroyed
     l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
+    r = Reading.create(lesson_id: 4, order_number: 1, url: "http://www.hello.com")
     l.readings << r
     assert_equal 1, l.readings.count
     Lesson.destroy_all
@@ -52,7 +47,7 @@ class ApplicationTest < Minitest::Test
   #Associate courses with lessons (both directions).
   def test_courses_associated_with_lessons
     l = Lesson.create(name: "First Lesson")
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Comp Sci", course_code: "ghi987")
     c.lessons << l
     assert_equal [l], Course.find(c.id).lessons
   end
@@ -60,7 +55,7 @@ class ApplicationTest < Minitest::Test
   #When a course is destroyed, its lessons should be automatically destroyed.
   def test_lessons_destroyed_when_course_destroyed
     l = Lesson.create(name: "First Lesson")
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Front End", course_code: "tiy277")
     c.lessons << l
     assert_equal 1, c.lessons.count
     Course.destroy_all
@@ -69,7 +64,7 @@ class ApplicationTest < Minitest::Test
 
   #Associate courses with course_instructors (both directions).
   def test_course_instructors_associated_with_courses
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Tech News", course_code: "xyz546")
     i = CourseInstructor.create()
     c.course_instructors << i
     assert_equal [i], Course.find(c.id).course_instructors
@@ -78,12 +73,12 @@ class ApplicationTest < Minitest::Test
   #If the course has any students associated with it, the course should not be deletable.
   def test_if_course_has_students_course_cannot_be_deleted
     Course.destroy_all
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "Computer Sci", course_code: "rst654")
     assert_equal 1, Course.count
     Course.destroy_all
     assert_equal 0, Course.count
 
-    c2 = Course.create(name: "Ruby on Rails")
+    c2 = Course.create(name: "Ruby on Rails", course_code: "abc098")
     s = CourseStudent.create()
     c2.course_students << s
     assert_equal 1, Course.count
@@ -102,9 +97,9 @@ class ApplicationTest < Minitest::Test
 
   # Set up a Course to have many readings through the Course's lessons.
   def test_course_associated_with_readings_through_lessons
-    c = Course.create(name: "Computer Science")
+    c = Course.create(name: "CompSci", course_code: "tiy123")
     l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
+    r = Reading.create(lesson_id: 2, order_number: 3, url: "https://www.url.com")
     l.readings << r
     c.lessons << l
     assert_equal [r], Course.find(c.id).readings
@@ -185,13 +180,6 @@ class ApplicationTest < Minitest::Test
     refute a3.save
   end
 
-  def test_course_students_associated_with_students
-    cs = CourseStudent.create()
-    i = CourseInstructor.create()
-    c.course_instructors << i
-    assert_equal [i], Course.find(c.id).course_instructors
-  end
-
   # Associate schools with terms (both directions).
   def test_associate_schools_terms_01
     s = School.create(name: "The Iron Yard")
@@ -203,11 +191,11 @@ class ApplicationTest < Minitest::Test
 
   # Associate terms with courses (both directions). If a term has any courses associated with it, the term should not be deletable.
   def test_associate_terms_courses_02
-    t = Term.create(name: "Fall 2015")
-    c = Course.create(name: "Ruby on Rails")
+    t = Term.create(name: "Fall 2015", starts_on: 2015-01-01, ends_on: 2015-06-02)
+    c = Course.create(name: "Ruby on Rails", course_code: "rut840")
     t.courses << c
     assert_equal 1, Term.count
-    t.destroy
+    Term.destroy_all
     assert_equal 1, Term.count
   end
 
@@ -235,7 +223,7 @@ class ApplicationTest < Minitest::Test
   # Associate lessons with their pre_class_assignments (both directions).
   def test_associate_lessons_preassignments_05
     l = Lesson.create(name: "Get schooled")
-    a = Assignment.create(name: "Learn something")
+    a = Assignment.create(course_id: 2, name: "Learn something", percent_of_grade: 20.00)
     a.lessons << l
     assert_equal 1, Assignment.count
   end
@@ -299,4 +287,14 @@ class ApplicationTest < Minitest::Test
     e = Course.new(course_code: "DEF 234", name: "Crashing Cars 101", term_id: 4)
     assert e.save
   end
+
+  #Associate CourseStudents with students, who happen to be users
+  def test_course_students_associated_with_users
+    cs = CourseStudent.create()
+    u = User.new(first_name: "Ruti", last_name: "Wajnberg", email: "ruti@gmail.com", photo_url: "https://www.photo.com")
+    u.save
+    u.course_students << cs
+    assert_equal [cs], User.find(u.id).course_students
+  end
+
 end
