@@ -28,7 +28,7 @@ class ApplicationTest < Minitest::Test
   #Associate lessons with readings (both directions).
   def test_lessons_associated_with_readings
     l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
+    r = Reading.create(lesson_id: 1, order_number: 4, url: "http://www.urltest.com")
     l.readings << r
 
     assert_equal [r], Lesson.find(l.id).readings
@@ -37,7 +37,7 @@ class ApplicationTest < Minitest::Test
   #When a lesson is destroyed, its readings should be automatically destroyed.
   def test_reading_destroyed_when_lesson_destroyed
     l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
+    r = Reading.create(lesson_id: 4, order_number: 1, url: "http://www.hello.com")
     l.readings << r
     assert_equal 1, l.readings.count
     Lesson.destroy_all
@@ -99,7 +99,7 @@ class ApplicationTest < Minitest::Test
   def test_course_associated_with_readings_through_lessons
     c = Course.create(name: "CompSci", course_code: "tiy123")
     l = Lesson.create(name: "First Lesson")
-    r = Reading.create(caption: "First Reading")
+    r = Reading.create(lesson_id: 2, order_number: 3, url: "https://www.url.com")
     l.readings << r
     c.lessons << l
     assert_equal [r], Course.find(c.id).readings
@@ -191,11 +191,11 @@ class ApplicationTest < Minitest::Test
 
   # Associate terms with courses (both directions). If a term has any courses associated with it, the term should not be deletable.
   def test_associate_terms_courses_02
-    t = Term.create(name: "Fall 2015")
+    t = Term.create(name: "Fall 2015", starts_on: 2015-01-01, ends_on: 2015-06-02)
     c = Course.create(name: "Ruby on Rails", course_code: "rut840")
     t.courses << c
     assert_equal 1, Term.count
-    t.destroy
+    Term.destroy_all
     assert_equal 1, Term.count
   end
 
@@ -223,7 +223,7 @@ class ApplicationTest < Minitest::Test
   # Associate lessons with their pre_class_assignments (both directions).
   def test_associate_lessons_preassignments_05
     l = Lesson.create(name: "Get schooled")
-    a = Assignment.create(name: "Learn something")
+    a = Assignment.create(course_id: 2, name: "Learn something", percent_of_grade: 20.00)
     a.lessons << l
     assert_equal 1, Assignment.count
   end
